@@ -1,0 +1,46 @@
+#Installer node js
+sudo yum -y install node
+sudo systemctl start node
+
+#Installez la dernière version LTS de Node.js
+yum install --lts
+
+#Ecrire le script et le placer dans /var/www/html/ 
+cd /var/www/html
+# script home.js
+sudo nano home.js
+// home.js - Page d'accueil
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.end('<h1>Je suis dans le home</h1>');
+});
+
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+  console.log(`Serveur en cours d'exécution sur le port ${port}`);
+});
+
+# script help.js et on y insère le script de journalisation et le place dans un fichier
+sudo nano help.php
+// help.js - Page d'aide
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.end('<h1>Je suis dans help</h1>');
+
+  // Journalisation dans un fichier (exemple)
+  const logMessage = `Accès à la page help - ${new Date().toISOString()}\n`;
+  // Vous pouvez enregistrer ce message dans un fichier ici
+});
+
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+  console.log(`Serveur en cours d'exécution sur le port ${port}`);
+});
+
+
+#Journaliser le tout dans mon journal en background et recuperer les erreurs
+sudo tail -f -n 1 /var/log/javascrpit-fpm/www-error.log >> /home/ec2-user/journal-nodejs.log &
