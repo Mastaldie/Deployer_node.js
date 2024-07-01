@@ -1,12 +1,26 @@
-#Installer node js
-sudo yum -y install node
-sudo systemctl start node
+# Procedure d'installation de node.js 
+# installs fnm (Fast Node Manager)
+curl -fsSL https://fnm.vercel.app/install | bash
+source /home/ec2-user/.bashrc
+# download and install Node.js
+fnm use --install-if-missing 20
 
-#Installez la dernière version LTS de Node.js
-yum install --lts
+# verifies the right Node.js version is in the environment
+node -v # should print `v20.15.0`
 
-#Ecrire le script et le placer dans /var/www/html/ 
-cd /var/www/html
+# verifies the right NPM version is in the environment
+npm -v # should print `10.7.0`
+
+#on revient au home 
+cd ~
+# on install la bibliotechque express
+npm install express
+# on cree le fichier server.js qui va comporter le serveur 
+nano server.js
+# on lance le serveur en background + la journalisation
+node server.js >> journal.log & 
+# on monitore le journal 
+tail -f journal.log 
 # script home.js
 sudo nano home.js
 // home.js - Page d'accueil
@@ -40,7 +54,3 @@ const port = process.env.PORT || 3000;
 server.listen(port, () => {
   console.log(`Serveur en cours d'exécution sur le port ${port}`);
 });
-
-
-#Journaliser le tout dans mon journal en background et recuperer les erreurs
-sudo tail -f -n 1 /var/log/javascrpit-fpm/www-error.log >> /home/ec2-user/journal-nodejs.log &
